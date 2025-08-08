@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculadora Gamer de Rankeadas</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Orbitron', sans-serif;
+      background-color: #0f0f0f;
+      color: #00ffea;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background-image: radial-gradient(circle at center, #1a1a1a 0%, #0f0f0f 100%);
+    }
+
+    h1 {
+      color: #00ffea;
+      text-shadow: 0 0 10px #00ffea;
+      font-size: 2.5em;
+      margin-bottom: 30px;
+    }
+
+    label {
+      font-size: 1.2em;
+      margin-top: 10px;
+    }
+
+    input {
+      background-color: #222;
+      border: 2px solid #00ffea;
+      color: #00ffea;
+      padding: 10px;
+      font-size: 1em;
+      margin: 10px;
+      border-radius: 5px;
+      width: 100px;
+      text-align: center;
+      box-shadow: 0 0 5px #00ffea;
+    }
+
+    button {
+      background-color: #00ffea;
+      color: #0f0f0f;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 24px;
+      font-size: 1.1em;
+      cursor: pointer;
+      box-shadow: 0 0 15px #00ffea, 0 0 30px #00ffea;
+      margin-top: 20px;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      background-color: #00ffd5;
+    }
+
+    #resultado {
+      margin-top: 30px;
+      font-size: 1.3em;
+      color: #fff;
+      background-color: #111;
+      border: 2px solid #00ffea;
+      padding: 20px;
+      width: 80%;
+      max-width: 500px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ffea;
+    }
+
+    @media (max-width: 600px) {
+      input, button {
+        width: 80%;
+      }
+
+      #resultado {
+        font-size: 1.1em;
+      }
+    }
+    @keyframes fadeZoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.fade-animate {
+  animation: fadeZoomIn 0.8s ease-out forwards;
+}
+  </style>
+</head>
+<body>
+    <div id="tsparticles"></div>
+  <h1>🔥 Calculadora Rankeada 🔥</h1>
+
+  <label for="vitorias">Vitórias:</label>
+  <input type="number" id="vitorias" placeholder="Ex: 85">
+
+  <label for="derrotas">Derrotas:</label>
+  <input type="number" id="derrotas" placeholder="Ex: 20">
+
+  <br>
+  <button onclick="mostrarResultado()">CALCULAR NÍVEL</button>
+
+  <div id="resultado"></div>
+  <script src="https://cdn.jsdelivr.net/npm/tsparticles@3/tsparticles.bundle.min.js"></script>
+  <script>
+    // Função para Calcular
+    function calcularRank(vitorias, derrotas) {
+      let saldoVitorias = vitorias - derrotas;
+      let nivel = "";
+
+      if (vitorias < 10) {
+        nivel = "🎮 Ferro";
+      } else if (vitorias >= 11 && vitorias <= 20) {
+        nivel = "🥉 Bronze";
+      } else if (vitorias >= 21 && vitorias <= 50) {
+        nivel = "🥈 Prata";
+      } else if (vitorias >= 51 && vitorias <= 80) {
+        nivel = "🥇 Ouro";
+      } else if (vitorias >= 81 && vitorias <= 90) {
+        nivel = "💎 Diamante";
+      } else if (vitorias >= 91 && vitorias <= 100) {
+        nivel = "🔥 Lendário";
+      } else if (vitorias >= 101) {
+        nivel = "👑 Imortal";
+      }
+
+      return `O Herói tem de saldo de <strong>${saldoVitorias}</strong> e está no nível de <strong>${nivel}</strong>`;
+    }
+
+    function mostrarResultado() {
+  const vitorias = parseInt(document.getElementById('vitorias').value);
+  const derrotas = parseInt(document.getElementById('derrotas').value);
+  const resultadoDiv = document.getElementById('resultado');
+
+  if (isNaN(vitorias) || isNaN(derrotas)) {
+    resultadoDiv.innerHTML = "⚠️ Por favor, preencha os dois campos com números válidos.";
+    resultadoDiv.classList.remove('fade-animate'); // remove caso exista
+    void resultadoDiv.offsetWidth; // força reflow
+    resultadoDiv.classList.add('fade-animate');
+    return;
+  }
+
+  const resultado = calcularRank(vitorias, derrotas);
+  resultadoDiv.innerHTML = resultado;
+
+  // Reinicia a animação
+  resultadoDiv.classList.remove('fade-animate'); // remove a classe se já tiver
+  void resultadoDiv.offsetWidth; // hack para reiniciar a animação
+  resultadoDiv.classList.add('fade-animate');
+}
+// Inicializar partículas no fundo
+    tsParticles.load("tsparticles", {
+      fullScreen: { enable: false },
+      background: { color: "#0f0f0f" },
+      particles: {
+        number: { value: 100 },
+        color: { value: "#00ffea" },
+        shape: { type: "circle" },
+        opacity: {
+          value: 0.2,
+          random: true,
+          anim: { enable: true, speed: 0.5, opacity_min: 0.05 }
+        },
+        size: {
+          value: 3,
+          random: true,
+          anim: { enable: true, speed: 2, size_min: 0.3 }
+        },
+        move: {
+          enable: true,
+          speed: 0.6,
+          direction: "none",
+          random: true,
+          straight: false,
+          outModes: "out"
+        }
+      },
+      interactivity: {
+        events: {
+          onhover: { enable: false },
+          onclick: { enable: false }
+        }
+      },
+      detectRetina: true
+    });
+  </script>
+</body>
+</html>
